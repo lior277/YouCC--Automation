@@ -9,7 +9,7 @@ export const config = {
     fullyParallel: process.env.FULLY_PARALLEL === 'true',
     forbidOnly: process.env.FORBID_ONLY === 'true',
     retries: ((): number => {
-        const val = parseInt(process.env.RETRIES || '', 10);
+        const val = parseInt(process.env.RETRIES ?? '', 10);
         return Number.isNaN(val) ? 0 : val;
     })(),
     workers: ((): number | undefined => {

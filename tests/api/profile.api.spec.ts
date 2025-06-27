@@ -27,7 +27,8 @@ test.describe('Profile API Tests', () => {
         assertMultiple(errors);
     });
 
-    test('PUT /users/profile - Authenticated Request', async ({ apiHandler, registeredUser, updateProfileData }) => {
+    test('PUT /users/profile - Authenticated Request',
+        async ({ apiHandler, updateProfileData }) => {
         const errors: [string, boolean][] = [];
 
         // Get current profile first

@@ -75,30 +75,4 @@ export class ProfilePageAPI {
             text: responseText
         };
     }
-
-    validateProfileData(profileData: ProfileData): boolean {
-        if (!profileData.username || profileData.username.trim() === "") {
-            return false;
-        }
-
-        if (profileData.newPassword && profileData.newPassword !== profileData.newPasswordConfirmation) {
-            return false;
-        }
-
-        if (profileData.newPassword && !profileData.currentPassword) {
-            return false;
-        }
-
-        return true;
-    }
-
-    async getProfileHeaders(): Promise<Record<string, string>> {
-        const response = await this.apiContext.get('/users/profile');
-        return response.headers();
-    }
-
-    async getProfileField(fieldName: keyof ProfileData): Promise<any> {
-        const result = await this.getCurrentUserProfile();
-        return result.data[fieldName];
-    }
 }

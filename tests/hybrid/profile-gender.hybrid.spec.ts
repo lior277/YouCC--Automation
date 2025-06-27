@@ -6,7 +6,9 @@ test.use({
 });
 
 test.describe('Hybrid Profile Tests', () => {
-    test('Update gender via API and verify in UI', async ({ page, profileAPI, registeredUser, profilePage, loginPage, updateProfileData }) => {
+    test('Update gender via API and verify in UI',
+        async ({ page, profileAPI, registeredUser, profilePage, loginPage, updateProfileData }
+        ) => {
         // Step 1: Modify gender via API
         const profileData = await profileAPI.getCurrentUserProfile();
 

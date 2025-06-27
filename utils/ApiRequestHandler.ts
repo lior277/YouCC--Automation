@@ -1,9 +1,9 @@
 import { APIRequestContext, APIResponse } from '@playwright/test';
 
 export class ApiRequestHandler {
-    private context: APIRequestContext;
-    private baseUrl: string;
-    private headers: Record<string, string>;
+    private readonly context: APIRequestContext;
+    private readonly baseUrl: string;
+    private readonly headers: Record<string, string>;
 
     constructor(context: APIRequestContext, baseUrl: string, headers: Record<string, string> = {}) {
         this.context = context;

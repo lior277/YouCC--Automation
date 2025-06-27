@@ -96,16 +96,16 @@ export const test = base.extend<{
     updateProfileData: async ({}, use) => {
         const createUpdateData = (currentProfile: any, updates: Partial<any> = {}) => ({
             username: currentProfile.username,
-            firstName: updates.firstName || currentProfile.firstName,
-            lastName: updates.lastName || currentProfile.lastName,
-            gender: updates.gender || currentProfile.gender || '',
-            age: updates.age || currentProfile.age || '',
-            address: updates.address || currentProfile.address || '',
-            phone: updates.phone || currentProfile.phone || '',
-            hobby: updates.hobby || currentProfile.hobby || '',
-            currentPassword: updates.currentPassword || '',
-            newPassword: updates.newPassword || '',
-            newPasswordConfirmation: updates.newPasswordConfirmation || ''
+            firstName: updates.firstName ?? currentProfile.firstName,
+            lastName: updates.lastName ?? currentProfile.lastName,
+            gender: updates.gender ?? currentProfile.gender ?? '',
+            age: updates.age ?? currentProfile.age ?? '',
+            address: updates.address ?? currentProfile.address ?? '',
+            phone: updates.phone ?? currentProfile.phone ?? '',
+            hobby: updates.hobby ?? currentProfile.hobby ?? '',
+            currentPassword: updates.currentPassword ?? '',
+            newPassword: updates.newPassword ?? '',
+            newPasswordConfirmation: updates.newPasswordConfirmation ?? ''
         });
 
         await use(createUpdateData);
