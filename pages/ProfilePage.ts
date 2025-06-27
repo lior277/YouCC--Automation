@@ -69,27 +69,10 @@ export class ProfilePage extends BasePage {
         }
     }
 
-    async changePassword(currentPassword: string, newPassword: string) {
-        await this.currentPasswordInput.fill(currentPassword);
-        await this.newPasswordInput.fill(newPassword);
-        await this.confirmPasswordInput.fill(newPassword);
-    }
-
-    async saveProfile() {
-        await this.saveButton.click();
-    }
-
-    async cancelChanges() {
-        await this.cancelButton.click();
-    }
-
-    async getSuccessMessage(): Promise<string> {
-        await this.successMessage.waitFor({ state: 'visible' });
-        return await this.successMessage.textContent() || '';
-    }
-
     async getFieldValue(fieldName: string): Promise<string> {
-        const field = this.page.locator(`input[name="${fieldName}"], select[name="${fieldName}"]`);
+        const field = this.page
+            .locator(`input[name="${fieldName}"], select[name="${fieldName}"]`);
+
         return await field.inputValue();
     }
 }

@@ -28,7 +28,4 @@ export class CarDetailsPage extends BasePage {
             return null;
         }
     }
-
-
-
 }

@@ -1,35 +1,36 @@
-import { test, expect } from '@fixtures/test-fixtures';
+import { test, expect } from '@fixtures/api-fixtures';
 import { config } from '@config/config';
-import { ProfilePage } from '@pages/ProfilePage';
 
-// Load the one-time authenticated session and set API base
 test.use({
-    storageState: '.auth/user.json',
-    baseURL:      config.apiBaseUrl,
+    baseURL: config.uiBaseUrl,
 });
 
 test.describe('Hybrid Profile Tests', () => {
-    test('Update gender via API and verify in UI', async ({ request, profilePage }) => {
-        // --- Step 1: Update via API ---
-        const apiResponse = await request.put('/users/profile', {
-            headers: { 'Content-Type': 'application/json' },
-            data:    { gender: 'Female' },
-        });
-        const status = apiResponse.status();
+    test('Update gender via API and verify in UI', async ({ page, authenticatedAPIContext, registeredUser, profilePage, loginPage, updateProfileData }) => {
+        // Step 1: Modify gender via API
+        const currentProfile = await authenticatedAPIContext.get('/users/profile');
+        const profileData = await currentProfile.json();
 
-        // Accept either success or forbidden
-        const allowedStatuses = [200, 201, 204];
-        expect(allowedStatuses).toContain(status);
+        const updateData = updateProfileData(profileData, { gender: 'Female' });
 
-        if (status === 403) {
-            // Forbidden: no UI state to verify
-            return;
-        }
+        const updateResponse = await authenticatedAPIContext.put('/users/profile', updateData);
+        expect([200, 201, 204]).toContain(updateResponse.status());
 
-        // --- Step 2: Verify in the UI using ProfilePage ---
-        await profilePage.navigate();
+        // Step 2: Login to UI and navigate to profile page
+        await page.goto('/');
 
-        // reload values and assert
+        const homePage = await loginPage
+            .setUsername(registeredUser.username)
+            .then(loginPage => loginPage.setPassword(registeredUser.password))
+            .then(loginPage => loginPage.clickLogin());
+
+        await page.waitForLoadState('networkidle');
+
+        // Navigate to profile page using HomePage method
+        await homePage.clickOnProfileLink();
+        await page.waitForLoadState('networkidle');
+
+        // Step 3: Assert the change in UI
         const genderValue = await profilePage.getFieldValue('gender');
         expect(genderValue).toBe('Female');
     });
