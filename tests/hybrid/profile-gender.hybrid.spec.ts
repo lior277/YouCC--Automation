@@ -6,15 +6,13 @@ test.use({
 });
 
 test.describe('Hybrid Profile Tests', () => {
-    test('Update gender via API and verify in UI', async ({ page, authenticatedAPIContext, registeredUser, profilePage, loginPage, updateProfileData }) => {
+    test('Update gender via API and verify in UI', async ({ page, profileAPI, registeredUser, profilePage, loginPage, updateProfileData }) => {
         // Step 1: Modify gender via API
-        const currentProfile = await authenticatedAPIContext.get('/users/profile');
-        const profileData = await currentProfile.json();
+        const profileData = await profileAPI.getCurrentUserProfile();
 
         const updateData = updateProfileData(profileData, { gender: 'Female' });
 
-        const updateResponse = await authenticatedAPIContext.put('/users/profile', updateData);
-        expect([200, 201, 204]).toContain(updateResponse.status());
+        await profileAPI.updateProfile(updateData);
 
         // Step 2: Login to UI and navigate to profile page
         await page.goto('/');
@@ -24,11 +22,8 @@ test.describe('Hybrid Profile Tests', () => {
             .then(loginPage => loginPage.setPassword(registeredUser.password))
             .then(loginPage => loginPage.clickLogin());
 
-        await page.waitForLoadState('networkidle');
-
         // Navigate to profile page using HomePage method
         await homePage.clickOnProfileLink();
-        await page.waitForLoadState('networkidle');
 
         // Step 3: Assert the change in UI
         const genderValue = await profilePage.getFieldValue('gender');
